@@ -1,5 +1,6 @@
-# Team 2 - The Second Team
+# Team 2: The Second Team
 ### Team Members
-    - one
-    - two
-    - three
+    - Ini Obot
+    - Cecilia Zeng
+    - Ellie Maye
+    - Raymond Yang
