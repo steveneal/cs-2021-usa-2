@@ -3,11 +3,19 @@ package com.cs.rfq.decorator.publishers;
 import com.cs.rfq.decorator.Rfq;
 import com.cs.rfq.decorator.TradeDataLoader;
 import com.cs.rfq.decorator.extractors.RfqMetadataFieldNames;
+import com.cs.rfq.decorator.extractors.VolumeTradedByWMYExtractor;
+import com.cs.rfq.decorator.extractors.VolumeTradedByWeekExtractor;
 import com.cs.rfq.decorator.extractors.VolumeTradedWithEntityYTDExtractor;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.joda.time.DateTime;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Map;
 
 public class dev {
@@ -40,14 +48,21 @@ public class dev {
         Rfq requests = Rfq.fromJson(validRfqJson);
 
         // Create Volume extractor class and run the method to obtain the key value pair
-        // TODO: Call the other aggregator functions here
+        // TODO: Call the other aggregator functions for Year here
         VolumeTradedWithEntityYTDExtractor volExtractor = new VolumeTradedWithEntityYTDExtractor();
+        VolumeTradedByWMYExtractor volMonthExtractor = new VolumeTradedByWMYExtractor();
+        VolumeTradedByWeekExtractor volWeekExtractor = new VolumeTradedByWeekExtractor();
 
         // The method return a key value pair, <volumeTradedYearToDate, volume>
         Map<RfqMetadataFieldNames, Object>  volMap = volExtractor.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  volMonthMap = volMonthExtractor.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  volWeekMap = volWeekExtractor.extractMetaData(requests, session, trades);
 
         // We will need to save this value as a field in our requests or save somewhere as "metadata"
         System.out.println(requests.getIsin() + ": " + volMap);
+        System.out.println(requests.getIsin() + ": " + volMonthMap);
+        System.out.println(requests.getIsin() + ": " + volWeekMap);
+
 
     }
 }

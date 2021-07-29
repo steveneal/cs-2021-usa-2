@@ -6,6 +6,7 @@ package com.cs.rfq.decorator.extractors;
 public enum RfqMetadataFieldNames {
     tradesWithEntityToday,
     tradesWithEntityPastWeek,
+    volumeTradedMonthToDate,
     tradesWithEntityPastYear,
     volumeTradedYearToDate,
 }
