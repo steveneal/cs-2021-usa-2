@@ -38,6 +38,8 @@ public class RfqProcessor {
         this.streamingContext = streamingContext;
 
         //TODO: use the TradeDataLoader to load the trade data archives
+        String filePath = "src/test/resources/trades/trades.json";
+        Dataset<Row> trades = new TradeDataLoader().loadTrades(session, filePath);
 
         //TODO: take a close look at how these two extractors are implemented
         extractors.add(new TotalTradesWithEntityExtractor());
