@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class dev {
     public static void main(String[] args) {
-
+        // Initial Spark Setup taken from the class Hello Spark file
         System.setProperty("hadoop.home.dir", "C:\\Java\\hadoop-2.9.2");
         System.setProperty("spark.master", "local");
 
@@ -20,13 +20,12 @@ public class dev {
                 .appName("Hello Spark")
                 .getOrCreate();
 
+        // Create our 'Historical Trades Database' based on the previously created .json
         String pth = "src\\test\\resources\\trades\\trades.json";
         TradeDataLoader lder = new TradeDataLoader();
         Dataset<Row> trades = lder.loadTrades(session, pth);
-//        System.out.println(trades);
 
-//        Rfq requests = new Rfq();
-
+        // Create a Sample Request coming in as String
         String validRfqJson = "{" +
                 "'id': '123ABC', " +
                 "'traderId': 3351266293154445953, " +
@@ -37,10 +36,17 @@ public class dev {
                 "'side': 'B' " +
                 "}";
 
+        // Parse String request
         Rfq requests = Rfq.fromJson(validRfqJson);
 
+        // Create Volume extractor class and run the method to obtain the key value pair
+        // TODO: Call the other aggregator functions here
         VolumeTradedWithEntityYTDExtractor volExtractor = new VolumeTradedWithEntityYTDExtractor();
+
+        // The method return a key value pair, <volumeTradedYearToDate, volume>
         Map<RfqMetadataFieldNames, Object>  volMap = volExtractor.extractMetaData(requests, session, trades);
+
+        // We will need to save this value as a field in our requests or save somewhere as "metadata"
         System.out.println(requests.getIsin() + ": " + volMap);
 
     }
