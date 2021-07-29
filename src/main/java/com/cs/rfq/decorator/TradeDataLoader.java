@@ -31,7 +31,7 @@ public class TradeDataLoader {
                 .add("SecurityID", StringType, true)
                 .add("SecurityIdSource", StringType, true)
                 .add("LastQty", LongType, true)
-                .add("TradeDate", StringType, true)
+                .add("TradeDate", DateType, true)
                 .add("LastPx", DoubleType, true)
                 .add("TransactTime", StringType, true)
                 .add("NoSides", StringType, true)
