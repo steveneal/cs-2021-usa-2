@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class VolumeTradedEntityMonthExtractorTest extends AbstractSparkUnitTest {
+public class VolumeTradedEntityYearExtractorTest extends AbstractSparkUnitTest {
 
     private Rfq rfq;
     Dataset<Row> trades;

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Date;
 import java.util.Map;
 
-import static com.cs.rfq.decorator.extractors.RfqMetadataFieldNames.volumeTradedYearToDate;
+import static com.cs.rfq.decorator.extractors.RfqMetadataFieldNames.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,14 +21,9 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
 
 
     @Test
-    public void loadTradeRecords() {
-        assertEquals(5, trades.count());
-    }
-
-    @Test
-    public void loadTradeFields() {
+    public void volumeTradeFields() {
                 //2018-06-09
-        String pth = "src\\test\\resources\\trades\\trades.json";
+        String pth = "src\\test\\resources\\trades\\trades_test.json";
         TradeDataLoader lder = new TradeDataLoader();
         Dataset<Row> trades = lder.loadTrades(session, pth);
 
@@ -38,7 +33,7 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
                 "'id': '123ABC', " +
                 "'traderId': 3351266293154445953, " +
                 "'entityId': 5561279226039690843, " +
-                "'instrumentId': 'AT0000383864', " +
+                "'instrumentId': 'AT0000386115', " +
                 "'qty': 250000, " +
                 "'price': 1.58, " +
                 "'side': 'B' " +
@@ -68,16 +63,24 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
         Map<RfqMetadataFieldNames, Object>  avetradeMap = avetradeExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  liquidMap = instrumentliquidExtractor.extractMetaData(requests, session, trades);
 
-        int volMapint = volMap.get(volumeTradedYearToDate);
+        Object volMapobj = volMap.get(RfqMetadataFieldNames.volumeTradedYearToDate);
+        Object volMonthMapobj = volMonthMap.get(volumeTradedMonthToDate);
+        Object volWeekMapobj = volWeekMap.get(tradesWithEntityPastWeek);
+        Object volMonthSecMapObj = volMonthSecMap.get(volumeTradedSecMonthToDate);
+        Object volWeekSecMapobj = volWeekSecMap.get(volumeTradedSecWeekToDate);
+        Object volYearSecMapobj = volYearSecMap.get(volumeTradedSecYearToDate);
+        Object avetradeMapobj = avetradeMap.get(averageTradedPrice);
+        Object liquidMapobj = liquidMap.get(instrumentLiquidity);
+
         assertAll(
-                () -> assertEquals("{volumeTradedYearToDate=2388450000}", volMap),
-                () -> assertEquals((Long) 5561279226039690843L, volMonthMap),
-                () -> assertEquals((String) "35", volWeekMap),
-                () -> assertEquals(7501009173671742065L, volMonthSecMap),
-                () -> assertEquals("N", volWeekSecMap),
-                () -> assertEquals("AT0000A0VRQ6", volYearSecMap),
-                () -> assertEquals("4", avetradeMap),
-                () -> assertEquals((Long) 500000L, liquidMap)
+                () -> assertEquals(6050000L, volMapobj),
+                () -> assertEquals((Long) 1350000L, volMonthMapobj),
+                () -> assertEquals( 0L, volWeekMapobj),
+                () -> assertEquals(500000L, volMonthSecMapObj),
+                () -> assertEquals(0L, volWeekSecMapobj),
+                () -> assertEquals(850000L, volYearSecMapobj),
+                () -> assertEquals(0L, avetradeMapobj),
+                () -> assertEquals((Long) 500000L, liquidMapobj)
         );
     }
 }

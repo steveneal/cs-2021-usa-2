@@ -1,20 +1,27 @@
 package com.cs.rfq.decorator.extractors;
 
 import com.cs.rfq.decorator.Rfq;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VolumeTradedEntityYearExtractor implements RfqMetadataExtractor {
 
     private String since;
+    Date yourDate = DateUtils.addDays(new Date(), -365);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String strDate = dateFormat.format(yourDate);
 
     public VolumeTradedEntityYearExtractor() {
-        this.since = DateTime.now().getYear() + "-01-01";
+        this.since = strDate;
     }
 
     @Override
