@@ -29,10 +29,10 @@ public class GenerateDummyTrades {
     private static final String trades_file = "src/test/resources/trades/trades.json";
 
     //variables:
-    private static final int counterparties_limit = 50;
-    private static final int instruments_limit = 50;
+    private static final int counterparties_limit = 3;
+    private static final int instruments_limit = 3;
     private static final int trades_min = 1;
-    private static final int trades_max = 30;
+    private static final int trades_max = 5;
 
     public static void main(String[] args) throws Exception {
 

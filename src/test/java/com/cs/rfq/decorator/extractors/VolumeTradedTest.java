@@ -68,7 +68,6 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
         Map<RfqMetadataFieldNames, Object>  avetradeMap = avetradeExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  liquidMap = instrumentliquidExtractor.extractMetaData(requests, session, trades);
 
-        int volMapint = volMap.get(volumeTradedYearToDate);
         assertAll(
                 () -> assertEquals("{volumeTradedYearToDate=2388450000}", volMap),
                 () -> assertEquals((Long) 5561279226039690843L, volMonthMap),
