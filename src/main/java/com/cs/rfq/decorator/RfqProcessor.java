@@ -1,6 +1,14 @@
 package com.cs.rfq.decorator;
 
+
 import com.cs.rfq.decorator.extractors.*;
+
+//import com.cs.rfq.decorator.extractors.RfqMetadataExtractor;
+//import com.cs.rfq.decorator.extractors.RfqMetadataFieldNames;
+//import com.cs.rfq.decorator.extractors.TotalTradesWithEntityExtractor;
+//import com.cs.rfq.decorator.extractors.VolumeTradedEntityYearExtractor;
+//import com.cs.rfq.decorator.extractors.VolumeTradedEntityWeekExtractor;
+
 import com.cs.rfq.decorator.publishers.MetadataJsonLogPublisher;
 import com.cs.rfq.decorator.publishers.MetadataPublisher;
 import org.apache.spark.SparkConf;
@@ -10,7 +18,6 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +52,19 @@ public class RfqProcessor {
         //TradeSideBiasExtractor tradeSideBias = new TradeSideBiasExtractor();
 
         //TODO: take a close look at how these two extractors are implemented
+        extractors.add(new AverageTradedPriceExtractor());
+        extractors.add(new InstrumentLiquidityExtractor());
         extractors.add(new TotalTradesWithEntityExtractor());
         extractors.add(new TradeSideBiasExtractor());
-        extractors.add(new VolumeTradedByWeekExtractor());
-        extractors.add(new VolumeTradedByWMYExtractor());
-        extractors.add(new VolumeTradedWithEntityYTDExtractor());
+        extractors.add(new VolumeTradedEntityWeekExtractor());
+        extractors.add(new VolumeTradedEntityMonthExtractor());
+        extractors.add(new VolumeTradedEntityYearExtractor());
+        extractors.add(new VolumeTradedInstrumentWeekExtractor());
+        extractors.add(new VolumeTradedInstrumentMonthExtractor());
+        extractors.add(new VolumeTradedInstrumentYearExtractor());
+
+
+
 
     }
 
