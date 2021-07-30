@@ -35,7 +35,7 @@ public class TradeDataLoader {
                 .add("LastPx", DoubleType, true)
                 .add("TransactTime", StringType, true)
                 .add("NoSides", StringType, true)
-                .add("Sides", StringType, true)
+                .add("Side", StringType, true)
                 .add("OrderID", LongType, true)
                 .add("Currency", StringType, true);
         System.out.println(schema);
