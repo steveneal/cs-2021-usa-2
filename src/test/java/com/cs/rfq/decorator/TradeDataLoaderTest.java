@@ -63,7 +63,7 @@ public class TradeDataLoaderTest extends AbstractSparkUnitTest {
                 () -> assertEquals(expectedTradeDate, tradeDate),
                 () -> assertEquals((String) "20180609-07:40:45", TransactTime),
                 () -> assertEquals((String) "1", NoSides),
-                () -> assertEquals((String) null, Sides),
+                () -> assertEquals((String) "1", Sides),
                 () -> assertEquals((Long) 7754419459932278311L, OrderID),
                 () -> assertEquals("EUR", currency)
         );
