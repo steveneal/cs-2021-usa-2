@@ -6,9 +6,11 @@ import com.cs.rfq.decorator.extractors.TotalTradesWithEntityExtractor;
 import com.cs.rfq.decorator.extractors.VolumeTradedEntityYearExtractor;
 import com.cs.rfq.decorator.publishers.MetadataJsonLogPublisher;
 import com.cs.rfq.decorator.publishers.MetadataPublisher;
+import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.slf4j.Logger;
@@ -32,6 +34,8 @@ public class RfqProcessor {
 
     private final MetadataPublisher publisher = new MetadataJsonLogPublisher();
 
+    static void consume(Rfq line){System.out.println(line);}
+
     public RfqProcessor(SparkSession session, JavaStreamingContext streamingContext) {
         this.session = session;
         this.streamingContext = streamingContext;
@@ -52,12 +56,24 @@ public class RfqProcessor {
         //TODO: convert each incoming line to a Rfq object and call processRfq method with it
         JavaDStream<Rfq> words = lines.flatMap(x -> {
                 Rfq asRfq = Rfq.fromJson(x);
-                processRfq(asRfq);
+                //processRfq(asRfq);
                 return Arrays.asList(asRfq).iterator();
             });
 
+        words.foreachRDD(rdd -> {
+            System.out.println("test");
+            rdd.collect().forEach(line -> {processRfq(line); consume(line);});
+        });
+
+
+
+
+
+
         //TODO: start the streaming context
         streamingContext.start();
+
+        streamingContext.awaitTermination();
     }
 
     public void processRfq(Rfq rfq) {

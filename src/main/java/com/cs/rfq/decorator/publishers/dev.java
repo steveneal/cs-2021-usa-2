@@ -3,6 +3,8 @@ package com.cs.rfq.decorator.publishers;
 import com.cs.rfq.decorator.Rfq;
 import com.cs.rfq.decorator.TradeDataLoader;
 import com.cs.rfq.decorator.extractors.*;
+import org.apache.commons.lang.time.DateUtils;
+
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -40,6 +42,7 @@ public class dev {
 
         // Create Volume extractor class and run the method to obtain the key value pair
         // TODO: Call the other aggregator functions for Year here
+
         VolumeTradedEntityYearExtractor volExtractor = new VolumeTradedEntityYearExtractor();
         VolumeTradedEntityMonthExtractor volMonthExtractor = new VolumeTradedEntityMonthExtractor();
         VolumeTradedEntityWeekExtractor volWeekExtractor = new VolumeTradedEntityWeekExtractor();
@@ -53,11 +56,14 @@ public class dev {
         Map<RfqMetadataFieldNames, Object>  volMap = volExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volMonthMap = volMonthExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volWeekMap = volWeekExtractor.extractMetaData(requests, session, trades);
+
         Map<RfqMetadataFieldNames, Object>  volMonthSecMap = volMonthSecExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volWeekSecMap = volWeekSecExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volYearSecMap = volYearSecExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  avetradeMap = avetradeExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  liquidMap = instrumentliquidExtractor.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  tradeBias = tradeSideBias.extractMetaData(requests, session, trades);
+
 
         // We will need to save this value as a field in our requests or save somewhere as "metadata"
         System.out.println(requests.getIsin() + ": " + volMap);
@@ -68,6 +74,7 @@ public class dev {
         System.out.println(requests.getIsin() + ": " + volYearSecMap);
         System.out.println(requests.getIsin() + ": " + avetradeMap);
         System.out.println(requests.getIsin() + ": " + liquidMap);
+        System.out.println(requests.getEntityId()+ ":  " +tradeBias);
 
 
     }
