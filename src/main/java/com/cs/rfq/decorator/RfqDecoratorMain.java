@@ -14,7 +14,7 @@ public class RfqDecoratorMain {
         System.setProperty("spark.master", "local[4]");
 
         //TODO: create a Spark configuration and set a sensible app name
-        SparkConf conf = new SparkConf().setAppName("StreamRFQ").setMaster("local");
+        SparkConf conf = new SparkConf().setAppName("StreamRFQ");
 
         //TODO: create a Spark streaming context
         JavaStreamingContext context = new JavaStreamingContext(conf, Durations.seconds(5));
