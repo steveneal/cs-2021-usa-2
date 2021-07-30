@@ -52,6 +52,7 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
         VolumeTradedInstrumentWeekExtractor volWeekSecExtractor = new VolumeTradedInstrumentWeekExtractor();
         AverageTradedPriceExtractor avetradeExtractor = new AverageTradedPriceExtractor();
         InstrumentLiquidityExtractor instrumentliquidExtractor = new InstrumentLiquidityExtractor();
+        TradeSideBiasExtractor tradeSideBias = new TradeSideBiasExtractor();
 
         // The method return a key value pair, <volumeTradedYearToDate, volume>
         Map<RfqMetadataFieldNames, Object> volMap = volExtractor.extractMetaData(requests, session, trades);
@@ -62,6 +63,7 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
         Map<RfqMetadataFieldNames, Object>  volYearSecMap = volYearSecExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  avetradeMap = avetradeExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  liquidMap = instrumentliquidExtractor.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  tradeBias = tradeSideBias.extractMetaData(requests, session, trades);
 
         Object volMapobj = volMap.get(RfqMetadataFieldNames.volumeTradedYearToDate);
         Object volMonthMapobj = volMonthMap.get(volumeTradedMonthToDate);
@@ -71,6 +73,9 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
         Object volYearSecMapobj = volYearSecMap.get(volumeTradedSecYearToDate);
         Object avetradeMapobj = avetradeMap.get(averageTradedPrice);
         Object liquidMapobj = liquidMap.get(instrumentLiquidity);
+        Object biasWeekobj = tradeBias.get(tradeSideBiasWeek);
+        Object biasMonthobj = tradeBias.get(tradeSideBiasMonth);
+
 
         assertAll(
                 () -> assertEquals(6050000L, volMapobj),
@@ -80,7 +85,9 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
                 () -> assertEquals(0L, volWeekSecMapobj),
                 () -> assertEquals(850000L, volYearSecMapobj),
                 () -> assertEquals(0L, avetradeMapobj),
-                () -> assertEquals((Long) 500000L, liquidMapobj)
+                () -> assertEquals((Long) 500000L, liquidMapobj),
+                () -> assertEquals(-1, biasWeekobj),
+                () -> assertEquals(-1, biasMonthobj)
         );
     }
 }

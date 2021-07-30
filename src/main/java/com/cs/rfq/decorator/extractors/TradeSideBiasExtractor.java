@@ -27,6 +27,7 @@ public class TradeSideBiasExtractor implements RfqMetadataExtractor {
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
         //Weekly buy and sell query
+        trades.createOrReplaceTempView("trade");
         String weekBuySide = String.format("SELECT SUM(LastQty) from trade where EntityId='%s' AND SecurityId='%s' AND TradeDate >= '%s' AND Side = 1",
                 rfq.getEntityId(),
                 rfq.getIsin(),
@@ -48,8 +49,8 @@ public class TradeSideBiasExtractor implements RfqMetadataExtractor {
                 rfq.getEntityId(),
                 rfq.getIsin(),
                 Month);
-       trades.createOrReplaceTempView("trade");
-        Object SellSideMonthVolume = session.sql(sellSideMonth).first().getLong(0);
+
+        Object SellSideMonthVolume = session.sql(sellSideMonth).first().get(0);
 
         Map<RfqMetadataFieldNames, Object> result = new HashMap<>();
         //report the ratio (as a single figure) of buy/sell traded for downstream systems to display.

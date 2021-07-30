@@ -17,7 +17,7 @@ public class VolumeTradedEntityMonthExtractor implements RfqMetadataExtractor {
         if (DateTime.now().getMonthOfYear() < 10){
        this.since = DateTime.now().getYear() +"-0"+DateTime.now().getMonthOfYear()+ "-01";
     }else{
-            this.since = DateTime.now().getYear() + DateTime.now().getMonthOfYear()+ "-01"; }
+            this.since = DateTime.now().getYear() +"-"+ DateTime.now().getMonthOfYear()+ "-01"; }
     }
 
     @Override

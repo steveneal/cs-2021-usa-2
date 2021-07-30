@@ -26,12 +26,14 @@ public class VolumeTradedInstrumentWeekExtractor implements RfqMetadataExtractor
 
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
+
         String query = String.format("SELECT sum(LastQty) from trade where TraderId='%s' AND SecurityId='%s' AND TradeDate >= '%s'",
                 rfq.getTraderId(),
                 rfq.getIsin(),
                 since);
 
         trades.createOrReplaceTempView("trade");
+
         Dataset<Row> sqlQueryResults = session.sql(query);
 
         Object volume = sqlQueryResults.first().get(0);
