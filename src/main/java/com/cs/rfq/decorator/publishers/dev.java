@@ -50,6 +50,7 @@ public class dev {
         VolumeTradedByWMYExtractor volMonthExtractor = new VolumeTradedByWMYExtractor();
         VolumeTradedByWeekExtractor volWeekExtractor = new VolumeTradedByWeekExtractor();
         VolumeTradedWithInstrumentMonthExtractor volMonthSecExtractor = new VolumeTradedWithInstrumentMonthExtractor();
+        VolumeTradedSecYearToDateExtractor volYearSecExtractor = new VolumeTradedSecYearToDateExtractor();
         VolumeTradedWithInstrumentWeekExtractor volWeekSecExtractor = new VolumeTradedWithInstrumentWeekExtractor();
 
         // The method return a key value pair, <volumeTradedYearToDate, volume>
@@ -58,6 +59,7 @@ public class dev {
         Map<RfqMetadataFieldNames, Object>  volWeekMap = volWeekExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volMonthSecMap = volMonthSecExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volWeekSecMap = volWeekSecExtractor.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  volYearSecMap = volYearSecExtractor.extractMetaData(requests, session, trades);
 
         // We will need to save this value as a field in our requests or save somewhere as "metadata"
         System.out.println(requests.getIsin() + ": " + volMap);
@@ -65,6 +67,7 @@ public class dev {
         System.out.println(requests.getIsin() + ": " + volWeekMap);
         System.out.println(requests.getIsin() + ": " + volMonthSecMap);
         System.out.println(requests.getIsin() + ": " + volWeekSecMap);
+        System.out.println(requests.getIsin() + ": " + volYearSecMap);
 
 
     }
