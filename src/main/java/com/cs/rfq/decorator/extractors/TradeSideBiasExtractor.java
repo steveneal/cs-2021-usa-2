@@ -69,9 +69,9 @@ public class TradeSideBiasExtractor implements RfqMetadataExtractor {
             ratioMonth = (int)((long) BuySideMonthVolume *100.0/ (long)SellSideMonthVolume+.05);
             result.put(RfqMetadataFieldNames.tradeSideBiasMonth, ratioMonth);
         }
-        System.out.println("Monthly Ratio:"+ratioMonth);
-        System.out.println("Monthly Buy Volume "+ BuySideMonthVolume);
-        System.out.println("Monthly Sell Volume  "+ SellSideMonthVolume);
+        //System.out.println("Monthly Ratio:"+ratioMonth);
+       // System.out.println("Monthly Buy Volume "+ BuySideMonthVolume);
+       // System.out.println("Monthly Sell Volume  "+ SellSideMonthVolume);
         return result;
     }
     protected void setWeekSince(java.sql.Date week) {this.Week = week; }
