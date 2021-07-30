@@ -2,10 +2,7 @@ package com.cs.rfq.decorator.publishers;
 
 import com.cs.rfq.decorator.Rfq;
 import com.cs.rfq.decorator.TradeDataLoader;
-import com.cs.rfq.decorator.extractors.RfqMetadataFieldNames;
-import com.cs.rfq.decorator.extractors.VolumeTradedByWMYExtractor;
-import com.cs.rfq.decorator.extractors.VolumeTradedByWeekExtractor;
-import com.cs.rfq.decorator.extractors.VolumeTradedWithEntityYTDExtractor;
+import com.cs.rfq.decorator.extractors.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -52,17 +49,19 @@ public class dev {
         VolumeTradedWithEntityYTDExtractor volExtractor = new VolumeTradedWithEntityYTDExtractor();
         VolumeTradedByWMYExtractor volMonthExtractor = new VolumeTradedByWMYExtractor();
         VolumeTradedByWeekExtractor volWeekExtractor = new VolumeTradedByWeekExtractor();
+        TradeSideBiasExtractor tradeSideBias = new TradeSideBiasExtractor();
 
         // The method return a key value pair, <volumeTradedYearToDate, volume>
         Map<RfqMetadataFieldNames, Object>  volMap = volExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volMonthMap = volMonthExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  volWeekMap = volWeekExtractor.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  tradeBias = tradeSideBias.extractMetaData(requests, session, trades);
 
         // We will need to save this value as a field in our requests or save somewhere as "metadata"
         System.out.println(requests.getIsin() + ": " + volMap);
         System.out.println(requests.getIsin() + ": " + volMonthMap);
         System.out.println(requests.getIsin() + ": " + volWeekMap);
-
+        System.out.println(requests.getEntityId()+ ":  " +tradeBias);
 
     }
 }
