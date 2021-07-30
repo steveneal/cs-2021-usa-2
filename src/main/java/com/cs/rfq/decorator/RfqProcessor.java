@@ -1,9 +1,6 @@
 package com.cs.rfq.decorator;
 
-import com.cs.rfq.decorator.extractors.RfqMetadataExtractor;
-import com.cs.rfq.decorator.extractors.RfqMetadataFieldNames;
-import com.cs.rfq.decorator.extractors.TotalTradesWithEntityExtractor;
-import com.cs.rfq.decorator.extractors.VolumeTradedWithEntityYTDExtractor;
+import com.cs.rfq.decorator.extractors.*;
 import com.cs.rfq.decorator.publishers.MetadataJsonLogPublisher;
 import com.cs.rfq.decorator.publishers.MetadataPublisher;
 import org.apache.spark.SparkConf;
@@ -45,9 +42,15 @@ public class RfqProcessor {
         TradeDataLoader dataLoader = new TradeDataLoader();
         trades = dataLoader.loadTrades(session, "src/test/resources/trades/trades.json");
 
+        //TradeSideBiasExtractor tradeSideBias = new TradeSideBiasExtractor();
+
         //TODO: take a close look at how these two extractors are implemented
         extractors.add(new TotalTradesWithEntityExtractor());
+        extractors.add(new TradeSideBiasExtractor());
+        extractors.add(new VolumeTradedByWeekExtractor());
+        extractors.add(new VolumeTradedByWMYExtractor());
         extractors.add(new VolumeTradedWithEntityYTDExtractor());
+
     }
 
     public void startSocketListener() throws InterruptedException {
@@ -57,23 +60,15 @@ public class RfqProcessor {
         //TODO: convert each incoming line to a Rfq object and call processRfq method with it
         JavaDStream<Rfq> words = lines.flatMap(x -> {
                 Rfq asRfq = Rfq.fromJson(x);
-                //processRfq(asRfq);
                 return Arrays.asList(asRfq).iterator();
             });
 
         words.foreachRDD(rdd -> {
-            System.out.println("test");
             rdd.collect().forEach(line -> {processRfq(line); consume(line);});
         });
 
-
-
-
-
-
         //TODO: start the streaming context
         streamingContext.start();
-
         streamingContext.awaitTermination();
     }
 
@@ -84,7 +79,15 @@ public class RfqProcessor {
         Map<RfqMetadataFieldNames, Object> metadata = new HashMap<>();
 
         //TODO: get metadata from each of the extractors
+        // Idea: Because every extractor class has the same method to create their metadata
+        //       We loop through the list of extractors and call each extractor's method
+        for(RfqMetadataExtractor extractor: extractors){
+            metadata.putAll(extractor.extractMetaData(rfq, session, trades));
+        }
 
         //TODO: publish the metadata
+        // Idea:
+
+        System.out.println(metadata);
     }
 }

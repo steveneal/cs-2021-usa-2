@@ -27,6 +27,7 @@ public class TradeSideBiasExtractor implements RfqMetadataExtractor {
     @Override
     public Map<RfqMetadataFieldNames, Object> extractMetaData(Rfq rfq, SparkSession session, Dataset<Row> trades) {
         //Weekly buy and sell query
+        trades.createOrReplaceTempView("trade");
         String weekBuySide = String.format("SELECT SUM(LastQty) from trade where EntityId='%s' AND SecurityId='%s' AND TradeDate >= '%s' AND Side = 1",
                 rfq.getEntityId(),
                 rfq.getIsin(),
@@ -48,7 +49,7 @@ public class TradeSideBiasExtractor implements RfqMetadataExtractor {
                 rfq.getEntityId(),
                 rfq.getIsin(),
                 Month);
-       trades.createOrReplaceTempView("trade");
+
         Object SellSideMonthVolume = session.sql(sellSideMonth).first().getLong(0);
 
         Map<RfqMetadataFieldNames, Object> result = new HashMap<>();
@@ -69,9 +70,9 @@ public class TradeSideBiasExtractor implements RfqMetadataExtractor {
             ratioMonth = (int)((long) BuySideMonthVolume *100.0/ (long)SellSideMonthVolume+.05);
             result.put(RfqMetadataFieldNames.tradeSideBiasMonth, ratioMonth);
         }
-        System.out.println("Monthly Ratio:"+ratioMonth);
-        System.out.println("Monthly Buy Volume "+ BuySideMonthVolume);
-        System.out.println("Monthly Sell Volume  "+ SellSideMonthVolume);
+//        System.out.println("Monthly Ratio:"+ratioMonth);
+//        System.out.println("Monthly Buy Volume "+ BuySideMonthVolume);
+//        System.out.println("Monthly Sell Volume  "+ SellSideMonthVolume);
         return result;
     }
     protected void setWeekSince(java.sql.Date week) {this.Week = week; }
