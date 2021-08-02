@@ -45,14 +45,24 @@ public class VolumeTradedTest extends AbstractSparkUnitTest {
         // Create Volume extractor class and run the method to obtain the key value pair
         // TODO: Call the other aggregator functions for Year here
         VolumeTradedEntityYearExtractor volExtractor = new VolumeTradedEntityYearExtractor();
+        volExtractor.setSince("2020-07-30");
         VolumeTradedEntityMonthExtractor volMonthExtractor = new VolumeTradedEntityMonthExtractor();
+        volMonthExtractor.setSince("2021-06-30");
         VolumeTradedEntityWeekExtractor volWeekExtractor = new VolumeTradedEntityWeekExtractor();
+        volWeekExtractor.setSince("2021-07-23");
         VolumeTradedInstrumentMonthExtractor volMonthSecExtractor = new VolumeTradedInstrumentMonthExtractor();
+        volMonthSecExtractor.setSince("2021-06-30");
         VolumeTradedInstrumentYearExtractor volYearSecExtractor = new VolumeTradedInstrumentYearExtractor();
+        volYearSecExtractor.setSince("2020-07-30");
         VolumeTradedInstrumentWeekExtractor volWeekSecExtractor = new VolumeTradedInstrumentWeekExtractor();
+        volWeekSecExtractor.setSince("2021-07-23");
         AverageTradedPriceExtractor avetradeExtractor = new AverageTradedPriceExtractor();
+        avetradeExtractor.setSince("2021-07-23");
         InstrumentLiquidityExtractor instrumentliquidExtractor = new InstrumentLiquidityExtractor();
+        instrumentliquidExtractor.setSince("2021-06-30");
         TradeSideBiasExtractor tradeSideBias = new TradeSideBiasExtractor();
+        tradeSideBias.setMonthSince(java.sql.Date.valueOf("2021-6-30"));
+        tradeSideBias.setWeekSince(java.sql.Date.valueOf("2021-7-23"));
 
         // The method return a key value pair, <volumeTradedYearToDate, volume>
         Map<RfqMetadataFieldNames, Object> volMap = volExtractor.extractMetaData(requests, session, trades);
