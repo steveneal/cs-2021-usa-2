@@ -103,6 +103,6 @@ public class RfqProcessor {
         //TODO: publish the metadata
         // Idea:
         publisher.publishMetadata(metadata);
-        //System.out.println(metadata);
+        System.out.println(metadata);
     }
 }
