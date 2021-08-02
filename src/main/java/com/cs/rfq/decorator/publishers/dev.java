@@ -22,6 +22,7 @@ public class dev {
                 .getOrCreate();
 
         // Create our 'Historical Trades Database' based on the previously created .json
+
         String pth = "src\\test\\resources\\trades\\trades.json";
         TradeDataLoader lder = new TradeDataLoader();
         Dataset<Row> trades = lder.loadTrades(session, pth);
@@ -31,7 +32,7 @@ public class dev {
                 "'id': '123ABC', " +
                 "'traderId': 3351266293154445953, " +
                 "'entityId': 5561279226039690843, " +
-                "'instrumentId': 'AT0000383864', " +
+                "'instrumentId': 'AT0000386115', " +
                 "'qty': 250000, " +
                 "'price': 1.58, " +
                 "'side': 'B' " +
@@ -51,6 +52,8 @@ public class dev {
         VolumeTradedInstrumentWeekExtractor volWeekSecExtractor = new VolumeTradedInstrumentWeekExtractor();
         AverageTradedPriceExtractor avetradeExtractor = new AverageTradedPriceExtractor();
         InstrumentLiquidityExtractor instrumentliquidExtractor = new InstrumentLiquidityExtractor();
+        TradeSideBiasExtractor tradeSideBias = new TradeSideBiasExtractor();
+        TradeHistoryData tradeHistory = new TradeHistoryData();
 
         // The method return a key value pair, <volumeTradedYearToDate, volume>
         Map<RfqMetadataFieldNames, Object>  volMap = volExtractor.extractMetaData(requests, session, trades);
@@ -63,6 +66,7 @@ public class dev {
         Map<RfqMetadataFieldNames, Object>  avetradeMap = avetradeExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  liquidMap = instrumentliquidExtractor.extractMetaData(requests, session, trades);
         Map<RfqMetadataFieldNames, Object>  tradeBias = tradeSideBias.extractMetaData(requests, session, trades);
+        Map<RfqMetadataFieldNames, Object>  tradeHisMap = tradeHistory.extractMetaData(requests, session, trades);
 
 
         // We will need to save this value as a field in our requests or save somewhere as "metadata"
@@ -74,7 +78,8 @@ public class dev {
         System.out.println(requests.getIsin() + ": " + volYearSecMap);
         System.out.println(requests.getIsin() + ": " + avetradeMap);
         System.out.println(requests.getIsin() + ": " + liquidMap);
-        System.out.println(requests.getEntityId()+ ":  " +tradeBias);
+        System.out.println(requests.getIsin()+ ":  " +tradeBias);
+        System.out.println(requests.getIsin()+ ":  " +tradeHisMap);
 
 
     }

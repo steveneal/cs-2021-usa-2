@@ -29,16 +29,16 @@ public class TradeHistoryData implements RfqMetadataExtractor {
         Dataset<Row> sqlQueryResults = session.sql(query);
 
 
-       String SecId ="SecurityId " + sqlQueryResults.first().get(0);
-       String TraDa ="TradeDate " + sqlQueryResults.first().get(1);
-       String LQty ="LastQty " + sqlQueryResults.first().get(2);
-        String LPx ="LastPx " + sqlQueryResults.first().get(3);
-        Object volume = SecId + " "+ TraDa+ " "+ LQty+ " "+ LPx + "/n";
-        //Object volume = sqlQueryResults.head(10);
+       //String SecId ="SecurityId " + sqlQueryResults.first().get(0);
+       //String TraDa ="TradeDate " + sqlQueryResults.first().get(1);
+       //String LQty ="LastQty " + sqlQueryResults.first().get(2);
+        //String LPx ="LastPx " + sqlQueryResults.first().get(3);
+        //Object volume = SecId + " "+ TraDa+ " "+ LQty+ " "+ LPx + "/n";
+        Object volume = (String) sqlQueryResults.head(10);
 
-        if (volume == null) {
-            volume = 0L;
-        }
+        //if (volume == null) {
+        //    volume = 0L;
+        //}
         System.out.println(1);
         Map<RfqMetadataFieldNames, Object> results = new HashMap<>();
         results.put(RfqMetadataFieldNames.tradeHistoryData, volume);
